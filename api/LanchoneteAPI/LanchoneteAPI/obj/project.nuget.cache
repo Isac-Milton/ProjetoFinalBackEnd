@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "K8Qad712RgI=",
+  "dgSpecHash": "BS43uzIxRck=",
   "success": true,
-  "projectFilePath": "C:\\Users\\thirz\\OneDrive\\Desktop\\SistemaLanchoneteIsac\\api\\LanchoneteAPI\\LanchoneteAPI\\LanchoneteAPI.csproj",
+  "projectFilePath": "C:\\Users\\thirz\\OneDrive\\Desktop\\SistemaLanchonete\\api\\LanchoneteAPI\\LanchoneteAPI\\LanchoneteAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\thirz\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\thirz\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

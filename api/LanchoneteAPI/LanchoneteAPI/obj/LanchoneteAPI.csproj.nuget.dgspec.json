@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\thirz\\OneDrive\\Desktop\\SistemaLanchoneteIsac\\api\\LanchoneteAPI\\LanchoneteAPI\\LanchoneteAPI.csproj": {}
+    "C:\\Users\\thirz\\OneDrive\\Desktop\\SistemaLanchonete\\api\\LanchoneteAPI\\LanchoneteAPI\\LanchoneteAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\thirz\\OneDrive\\Desktop\\SistemaLanchoneteIsac\\api\\LanchoneteAPI\\LanchoneteAPI\\LanchoneteAPI.csproj": {
+    "C:\\Users\\thirz\\OneDrive\\Desktop\\SistemaLanchonete\\api\\LanchoneteAPI\\LanchoneteAPI\\LanchoneteAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\thirz\\OneDrive\\Desktop\\SistemaLanchoneteIsac\\api\\LanchoneteAPI\\LanchoneteAPI\\LanchoneteAPI.csproj",
+        "projectUniqueName": "C:\\Users\\thirz\\OneDrive\\Desktop\\SistemaLanchonete\\api\\LanchoneteAPI\\LanchoneteAPI\\LanchoneteAPI.csproj",
         "projectName": "LanchoneteAPI",
-        "projectPath": "C:\\Users\\thirz\\OneDrive\\Desktop\\SistemaLanchoneteIsac\\api\\LanchoneteAPI\\LanchoneteAPI\\LanchoneteAPI.csproj",
+        "projectPath": "C:\\Users\\thirz\\OneDrive\\Desktop\\SistemaLanchonete\\api\\LanchoneteAPI\\LanchoneteAPI\\LanchoneteAPI.csproj",
         "packagesPath": "C:\\Users\\thirz\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\thirz\\OneDrive\\Desktop\\SistemaLanchoneteIsac\\api\\LanchoneteAPI\\LanchoneteAPI\\obj\\",
+        "outputPath": "C:\\Users\\thirz\\OneDrive\\Desktop\\SistemaLanchonete\\api\\LanchoneteAPI\\LanchoneteAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
