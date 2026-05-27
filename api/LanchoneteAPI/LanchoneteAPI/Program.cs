@@ -32,12 +32,9 @@ builder.Services.AddAuthorization();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
-        policy.SetIsOriginAllowed(origin =>
-            origin.Contains("vercel.app") ||
-            origin == "http://localhost:4200"
-        )
-        .AllowAnyHeader()
-        .AllowAnyMethod());
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod());
 });
 
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
