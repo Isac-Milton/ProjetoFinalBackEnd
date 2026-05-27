@@ -7,7 +7,7 @@ import { Categoria, CreateCategoriaRequest, UpdateCategoriaRequest } from '../mo
 
 export class CategoriaService {
 
-  private readonly API = 'http://localhost:5007/api';
+  private readonly API = 'https://projetofinalbackend-production.up.railway.app/api';
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 

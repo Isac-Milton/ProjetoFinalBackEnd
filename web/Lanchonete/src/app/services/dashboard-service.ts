@@ -7,7 +7,7 @@ import { Dashboard } from '../models/dashboard-model';
 
 export class DashboardService {
 
-  private readonly API = 'http://localhost:5007/api';
+  private readonly API = 'https://projetofinalbackend-production.up.railway.app/api';
 
   constructor(private http: HttpClient, private auth: AuthService) {}
   

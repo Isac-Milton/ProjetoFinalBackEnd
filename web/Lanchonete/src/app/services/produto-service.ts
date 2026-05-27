@@ -8,7 +8,7 @@ import { retry } from 'rxjs';
 
 export class ProdutoService {
 
-  private readonly API = 'http://localhost:5007/api';
+  private readonly API = 'https://projetofinalbackend-production.up.railway.app/api';
   constructor(private http: HttpClient, private auth: AuthService) {}
 
   getAll() { return this.http.get<Produto[]>(`${this.API}/produtos`, { headers: this.auth.getHeaders() }).pipe(retry(1)); }

@@ -8,7 +8,7 @@ import { LoginRequest, LoginResponse } from '../models/auth-model';
 
 export class AuthService {
 
-  private readonly API = 'http://localhost:5007/api';
+  private readonly API = 'https://projetofinalbackend-production.up.railway.app/api';
   private _usuario = new BehaviorSubject<LoginResponse | null>(this.loadUser());
 
   usuario$ = this._usuario.asObservable();

@@ -7,7 +7,7 @@ import { Pedido, CreatePedidoRequest, AtualizarStatusRequest } from '../models/p
 
 export class PedidoService {
 
-  private readonly API = 'http://localhost:5007/api';
+  private readonly API = 'https://projetofinalbackend-production.up.railway.app/api';
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
