@@ -1,0 +1,153 @@
+<div class="p-4">
+  <div class="mb-4">
+    <h2 class="fw-bold">Dashboard</h2>
+    <p class="text-muted">Resumo do dia</p>
+  </div>
+
+  @if (loading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-warning"></div>
+    </div>
+  }
+
+  @if (data) {
+    <!-- Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <p class="text-muted small mb-1">Pedidos Hoje</p>
+                <h3 class="fw-bold mb-0">{{ data.totalPedidosHoje }}</h3>
+              </div>
+              <span style="font-size: 2rem;">🧾</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <p class="text-muted small mb-1">Faturamento Hoje</p>
+                <h3 class="fw-bold mb-0 text-success">{{ data.faturamentoHoje | currency:'BRL' }}</h3>
+              </div>
+              <span style="font-size: 2rem;">💰</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <p class="text-muted small mb-1">Em Aberto</p>
+                <h3 class="fw-bold mb-0 text-warning">{{ data.pedidosEmAberto }}</h3>
+              </div>
+              <span style="font-size: 2rem;">⏳</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <p class="text-muted small mb-1">Estoque Baixo</p>
+                <h3 class="fw-bold mb-0 text-danger">{{ data.produtosEstoqueBaixo }}</h3>
+              </div>
+              <span style="font-size: 2rem;">⚠️</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <!-- Faturamento semanal -->
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <h5 class="fw-semibold mb-3">Faturamento — Últimos 7 dias</h5>
+            @for (dia of data.faturamentoSemana; track dia.data) {
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="text-muted small" style="width: 40px;">{{ dia.data }}</span>
+                <div class="flex-grow-1 bg-light rounded" style="height: 20px; overflow: hidden;">
+                  <div class="h-100 rounded d-flex align-items-center justify-content-end pe-2"
+                       style="background-color: #e65100; transition: width 0.3s;"
+                       [style.width.%]="getBarWidth(dia.valor)">
+                    @if (dia.valor > 0) {
+                      <small class="text-white fw-bold" style="font-size: 10px;">
+                        {{ dia.valor | currency:'BRL':'symbol':'1.0-0' }}
+                      </small>
+                    }
+                  </div>
+                </div>
+                <span class="text-muted small" style="width: 30px;">{{ dia.pedidos }}p</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Mais vendidos -->
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <h5 class="fw-semibold mb-3">Produtos Mais Vendidos</h5>
+            @for (prod of data.produtosMaisVendidos; track prod.nome; let i = $index) {
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="badge rounded-circle" style="background-color: #e65100; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;">{{ i + 1 }}</span>
+                <div class="flex-grow-1">
+                  <p class="mb-0 fw-semibold small">{{ prod.nome }}</p>
+                  <p class="mb-0 text-muted" style="font-size: 11px;">{{ prod.quantidade }} unidades</p>
+                </div>
+                <span class="text-success fw-semibold small">{{ prod.receita | currency:'BRL' }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Pedidos recentes -->
+      <div class="col-12">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-semibold mb-0">Pedidos Recentes</h5>
+              <a routerLink="/pedidos" class="btn btn-sm btn-outline-warning">Ver todos</a>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead class="table-light">
+                  <tr>
+                    <th>#</th>
+                    <th>Cliente</th>
+                    <th>Status</th>
+                    <th class="text-end">Total</th>
+                    <th class="text-end">Hora</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (p of data.pedidosRecentes; track p.id) {
+                    <tr>
+                      <td class="text-muted">#{{ p.id }}</td>
+                      <td class="fw-semibold">{{ p.nomeCliente || 'Cliente' }}</td>
+                      <td><span class="badge" [class]="getStatusClass(p.status)">{{ p.status }}</span></td>
+                      <td class="text-end text-success fw-semibold">{{ p.total | currency:'BRL' }}</td>
+                      <td class="text-end text-muted">{{ p.criadoEm | date:'HH:mm' }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

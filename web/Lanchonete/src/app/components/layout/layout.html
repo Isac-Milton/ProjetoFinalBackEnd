@@ -1,0 +1,89 @@
+<div class="d-flex" style="min-height: 100vh;">
+
+  <nav class="d-flex flex-column p-3 text-white" style="width: 260px; background-color: #e65100; min-height: 100vh;">
+
+    <div class="text-center mb-4 pb-3 border-bottom border-warning">
+      <h5 class="mb-0 fw-bold">Lanchonete</h5>
+      <small class="text-warning">Sistema de Gestão</small>
+    </div>
+
+    <div class="bg-white bg-opacity-10 rounded p-2 mb-3 text-center">
+      <small class="text-warning d-block">Logado como</small>
+      <span class="fw-semibold">{{ auth.usuario?.nome }}</span>
+      <span class="badge bg-warning text-dark d-block mt-1">{{ auth.usuario?.perfil }}</span>
+    </div>
+
+    <ul class="nav nav-pills flex-column gap-1 flex-grow-1">
+      <li class="nav-item">
+        <a routerLink="/dashboard" routerLinkActive="active bg-white text-dark"
+           class="nav-link text-white d-flex align-items-center gap-2">
+          <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/pedidos" routerLinkActive="active bg-white text-dark"
+           class="nav-link text-white d-flex align-items-center gap-2">
+          <i class="bi bi-receipt"></i> Pedidos
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/pedidos/novo" routerLinkActive="active bg-white text-dark"
+           class="nav-link text-white d-flex align-items-center gap-2">
+          <i class="bi bi-plus-circle"></i> Novo Pedido
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/produtos" routerLinkActive="active bg-white text-dark"
+           class="nav-link text-white d-flex align-items-center gap-2">
+          <i class="bi bi-bag"></i> Produtos
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/categorias" routerLinkActive="active bg-white text-dark"
+           class="nav-link text-white d-flex align-items-center gap-2">
+          <i class="bi bi-grid"></i> Categorias
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/estoque" routerLinkActive="active bg-white text-dark"
+           class="nav-link text-white d-flex align-items-center gap-2">
+          <i class="bi bi-box-seam"></i> Estoque
+        </a>
+      </li>
+
+      @if (auth.isAdmin) {
+        <li class="mt-2">
+          <small class="text-warning text-uppercase fw-bold px-2">Administração</small>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/usuarios" routerLinkActive="active bg-white text-dark"
+             class="nav-link text-white d-flex align-items-center gap-2">
+            <i class="bi bi-people"></i> Usuários
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/cupons" routerLinkActive="active bg-white text-dark"
+             class="nav-link text-white d-flex align-items-center gap-2">
+            <i class="bi bi-tag"></i> Cupons
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/relatorios" routerLinkActive="active bg-white text-dark"
+             class="nav-link text-white d-flex align-items-center gap-2">
+            <i class="bi bi-bar-chart"></i> Relatórios
+          </a>
+        </li>
+      }
+    </ul>
+
+    <button (click)="auth.logout()"
+      class="btn btn-outline-warning mt-3 d-flex align-items-center gap-2 justify-content-center">
+      <i class="bi bi-box-arrow-left"></i> Sair
+    </button>
+  </nav>
+
+  <main class="flex-grow-1 bg-light overflow-auto">
+    <router-outlet />
+  </main>
+
+</div>

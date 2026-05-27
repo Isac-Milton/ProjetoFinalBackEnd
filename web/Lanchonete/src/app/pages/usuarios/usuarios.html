@@ -1,0 +1,111 @@
+<div class="p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold">Usuários</h2>
+      <p class="text-muted">{{ usuarios.length }} usuários cadastrados</p>
+    </div>
+    <button class="btn btn-warning fw-semibold" (click)="abrirModal()">
+      <i class="bi bi-plus-lg"></i> Novo Usuário
+    </button>
+  </div>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Perfil</th>
+              <th>Telefone</th>
+              <th class="text-center">Status</th>
+              <th class="text-center">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (u of usuarios; track u.id) {
+              <tr>
+                <td class="fw-semibold">{{ u.nome }}</td>
+                <td class="text-muted">{{ u.email }}</td>
+                <td>
+                  <span class="badge"
+                    [class]="u.perfil === 'Admin' ? 'bg-danger' : u.perfil === 'Funcionario' ? 'bg-primary' : 'bg-secondary'">
+                    {{ u.perfil }}
+                  </span>
+                </td>
+                <td>{{ u.telefone || '-' }}</td>
+                <td class="text-center">
+                  <span class="badge" [class]="u.ativo ? 'bg-success' : 'bg-secondary'">
+                    {{ u.ativo ? 'Ativo' : 'Inativo' }}
+                  </span>
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-primary" (click)="editar(u)">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="6" class="text-center py-5 text-muted">Nenhum usuário encontrado.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  @if (modalAberto) {
+    <div class="modal d-block" style="background: rgba(0,0,0,0.5);">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title fw-bold">{{ editando ? 'Editar Usuário' : 'Novo Usuário' }}</h5>
+            <button class="btn-close" (click)="fecharModal()"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label fw-semibold">Nome *</label>
+                <input class="form-control" [(ngModel)]="form.nome" />
+              </div>
+              @if (!editando) {
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Email *</label>
+                  <input type="email" class="form-control" [(ngModel)]="form.email" />
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Senha *</label>
+                  <input type="password" class="form-control" [(ngModel)]="form.senha" />
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Perfil *</label>
+                  <select class="form-select" [(ngModel)]="form.perfil">
+                    <option value="Admin">Admin</option>
+                    <option value="Funcionario">Funcionário</option>
+                    <option value="Cliente">Cliente</option>
+                  </select>
+                </div>
+              }
+              <div class="col-12">
+                <label class="form-label fw-semibold">Telefone</label>
+                <input class="form-control" [(ngModel)]="form.telefone" />
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold">Endereço</label>
+                <input class="form-control" [(ngModel)]="form.endereco" />
+              </div>
+            </div>
+            @if (erro) { <div class="alert alert-danger mt-3">{{ erro }}</div> }
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="fecharModal()">Cancelar</button>
+            <button class="btn btn-warning fw-semibold" (click)="salvar()" [disabled]="salvando">
+              {{ salvando ? 'Salvando...' : 'Salvar' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

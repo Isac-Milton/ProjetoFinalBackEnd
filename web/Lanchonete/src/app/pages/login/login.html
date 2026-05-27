@@ -1,0 +1,41 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center"
+     style="background: linear-gradient(135deg, #e65100, #bf360c);">
+  <div class="card shadow-lg" style="width: 400px;">
+    <div class="card-body p-5">
+
+      <div class="text-center mb-4">
+        <h3 class="fw-bold">Sistema Lanchonete</h3>
+        <p class="text-muted">Faça login para continuar</p>
+      </div>
+
+      <form (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Email</label>
+          <input type="email" class="form-control" [(ngModel)]="email" name="email"
+                 placeholder="admin@lanchonete.com" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Senha</label>
+          <input type="password" class="form-control" [(ngModel)]="senha" name="senha"
+                 placeholder="••••••••" required />
+        </div>
+
+        @if (erro) {
+          <div class="alert alert-danger py-2">{{ erro }}</div>
+        }
+
+        <button type="submit" class="btn btn-warning w-100 fw-semibold py-2" [disabled]="loading">
+          {{ loading ? 'Entrando...' : 'Entrar' }}
+        </button>
+      </form>
+
+      <div class="mt-4 p-3 bg-light rounded">
+        <p class="fw-semibold mb-1 small">Credenciais:</p>
+        <p class="mb-0 small"><strong>Admin:</strong> admin&#64;lanchonete.com / Admin&#64;123</p>
+        <p class="mb-0 small"><strong>Func:</strong> funcionario&#64;lanchonete.com / Func&#64;123</p>
+      </div>
+
+    </div>
+  </div>
+</div>

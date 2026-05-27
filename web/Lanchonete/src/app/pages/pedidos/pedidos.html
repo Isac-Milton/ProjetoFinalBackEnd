@@ -1,0 +1,109 @@
+<div class="p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold">Pedidos</h2>
+      <p class="text-muted">{{ pedidos.length }} pedidos encontrados</p>
+    </div>
+    <a routerLink="/pedidos/novo" class="btn btn-warning fw-semibold">
+      <i class="bi bi-plus-lg"></i> Novo Pedido
+    </a>
+  </div>
+
+  <!-- Filtros -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body d-flex flex-wrap gap-3">
+      <select class="form-select" style="width: auto;" [(ngModel)]="statusFiltro" (change)="carregar()">
+        <option value="">Todos os status</option>
+        @for (s of statusList; track s) {
+          <option [value]="s">{{ s }}</option>
+        }
+      </select>
+      <input type="date" class="form-control" style="width: auto;" [(ngModel)]="dataInicio" (change)="carregar()" />
+      <input type="date" class="form-control" style="width: auto;" [(ngModel)]="dataFim" (change)="carregar()" />
+      <button class="btn btn-outline-secondary" (click)="statusFiltro=''; dataInicio=''; dataFim=''; carregar()">
+        <i class="bi bi-x-circle"></i> Limpar
+      </button>
+    </div>
+  </div>
+
+  <!-- Lista de pedidos -->
+  <div class="d-flex flex-column gap-3">
+    @for (p of pedidos; track p.id) {
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+            <div>
+              <div class="d-flex align-items-center gap-2 flex-wrap mb-2">
+                <span class="fw-bold">#{{ p.id }}</span>
+                <span class="badge" [class]="getStatusClass(p.status)">{{ p.status }}</span>
+                <span class="badge bg-light text-dark border">{{ p.tipo }}</span>
+                <span class="badge bg-light text-dark border">{{ p.formaPagamento }}</span>
+              </div>
+              <p class="mb-1">
+                <strong>{{ p.nomeCliente || p.usuarioNome || 'Cliente balcão' }}</strong>
+                @if (p.telefoneCliente) { <span class="text-muted"> · {{ p.telefoneCliente }}</span> }
+              </p>
+              @if (p.enderecoEntrega) {
+                <p class="text-muted small mb-1"><i class="bi bi-geo-alt"></i> {{ p.enderecoEntrega }}</p>
+              }
+              <p class="text-muted small mb-2">{{ p.criadoEm | date:'dd/MM/yyyy HH:mm' }}</p>
+              <div class="d-flex flex-wrap gap-1">
+                @for (item of p.itens; track item.id) {
+                  <span class="badge bg-light text-dark border">{{ item.quantidade }}x {{ item.produtoNome }}</span>
+                }
+              </div>
+            </div>
+            <div class="text-end">
+              <h4 class="fw-bold text-success mb-0">{{ p.total | currency:'BRL' }}</h4>
+              @if (p.desconto > 0) { <small class="text-muted">Desc: {{ p.desconto | currency:'BRL' }}</small> }
+              @if (p.taxaEntrega > 0) { <small class="text-muted d-block">+Entrega: {{ p.taxaEntrega | currency:'BRL' }}</small> }
+            </div>
+          </div>
+
+          @if (p.status !== 'Cancelado' && p.status !== 'Entregue') {
+            <div class="d-flex flex-wrap gap-2 mt-3 pt-3 border-top">
+              @for (s of proximosStatus(p.status); track s) {
+                <button class="btn btn-sm btn-outline-warning" (click)="mudarStatus(p, s)">
+                  → {{ s }}
+                </button>
+              }
+              <button class="btn btn-sm btn-outline-danger ms-auto" (click)="abrirModalCancelar(p)">
+                <i class="bi bi-x-circle"></i> Cancelar
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    } @empty {
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center py-5 text-muted">Nenhum pedido encontrado.</div>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Modal cancelar -->
+@if (modalCancelar) {
+  <div class="modal d-block" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <h5 class="modal-title fw-bold">Cancelar Pedido</h5>
+          <button class="btn-close" (click)="fecharModalCancelar()"></button>
+        </div>
+        <div class="modal-body">
+          Tem certeza que deseja cancelar o pedido <strong>#{{ modalCancelar.id }}</strong>?
+          @if (modalCancelar.nomeCliente || modalCancelar.usuarioNome) {
+            <p class="text-muted mt-1 mb-0">Cliente: {{ modalCancelar.nomeCliente || modalCancelar.usuarioNome }}</p>
+          }
+        </div>
+        <div class="modal-footer border-0">
+          <button class="btn btn-secondary" (click)="fecharModalCancelar()">Voltar</button>
+          <button class="btn btn-danger fw-semibold" (click)="confirmarCancelar()">
+            <i class="bi bi-x-circle"></i> Confirmar Cancelamento
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

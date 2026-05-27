@@ -1,0 +1,137 @@
+<div class="p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold">Cupons</h2>
+      <p class="text-muted">{{ cupons.length }} cupons cadastrados</p>
+    </div>
+    <button class="btn btn-warning fw-semibold" (click)="abrirModal()">
+      <i class="bi bi-plus-lg"></i> Novo Cupom
+    </button>
+  </div>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Código</th>
+              <th>Tipo</th>
+              <th>Desconto</th>
+              <th>Mínimo</th>
+              <th>Usos</th>
+              <th>Validade</th>
+              <th class="text-center">Status</th>
+              <th class="text-center">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (c of cupons; track c.id) {
+              <tr>
+                <td><span class="badge bg-dark font-monospace">{{ c.codigo }}</span></td>
+                <td>{{ c.tipoDesconto }}</td>
+                <td class="fw-semibold text-success">
+                  @if (c.tipoDesconto === 'Percentual') { {{ c.valorDesconto }}% }
+                  @else { {{ c.valorDesconto | currency:'BRL' }} }
+                </td>
+                <td>{{ c.valorMinimoPedido ? (c.valorMinimoPedido | currency:'BRL') : '-' }}</td>
+                <td>{{ c.usosAtuais }} / {{ c.limiteUsos ?? '∞' }}</td>
+                <td>{{ c.validoAte ? (c.validoAte | date:'dd/MM/yyyy') : 'Sem validade' }}</td>
+                <td class="text-center">
+                  <span class="badge" [class]="c.ativo ? 'bg-success' : 'bg-secondary'">
+                    {{ c.ativo ? 'Ativo' : 'Inativo' }}
+                  </span>
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-danger" (click)="confirmarExclusao(c)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="8" class="text-center py-5 text-muted">Nenhum cupom cadastrado.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  @if (modalAberto) {
+    <div class="modal d-block" style="background: rgba(0,0,0,0.5);">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title fw-bold">Novo Cupom</h5>
+            <button class="btn-close" (click)="fecharModal()"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Código *</label>
+                <input class="form-control text-uppercase" [(ngModel)]="form.codigo" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Tipo *</label>
+                <select class="form-select" [(ngModel)]="form.tipoDesconto">
+                  <option value="Percentual">Percentual (%)</option>
+                  <option value="ValorFixo">Valor Fixo (R$)</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Valor Desconto *</label>
+                <input type="number" class="form-control" [(ngModel)]="form.valorDesconto" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Pedido Mínimo</label>
+                <input type="number" class="form-control" [(ngModel)]="form.valorMinimoPedido" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Limite de Usos</label>
+                <input type="number" class="form-control" [(ngModel)]="form.limiteUsos" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Válido até</label>
+                <input type="date" class="form-control" [(ngModel)]="form.validoAte" />
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold">Descrição</label>
+                <textarea class="form-control" [(ngModel)]="form.descricao" rows="2"></textarea>
+              </div>
+            </div>
+            @if (erro) { <div class="alert alert-danger mt-3">{{ erro }}</div> }
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="fecharModal()">Cancelar</button>
+            <button class="btn btn-warning fw-semibold" (click)="salvar()" [disabled]="salvando">
+              {{ salvando ? 'Salvando...' : 'Salvar' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (modalConfirmacao) {
+    <div class="modal d-block" style="background: rgba(0,0,0,0.5);">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header border-0">
+            <h5 class="modal-title fw-bold text-danger">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>Excluir Cupom
+            </h5>
+          </div>
+          <div class="modal-body">
+            Tem certeza que deseja excluir o cupom <strong>{{ cupomParaExcluir?.codigo }}</strong>?
+          </div>
+          <div class="modal-footer border-0">
+            <button class="btn btn-secondary btn-sm" (click)="cancelarExclusao()">Cancelar</button>
+            <button class="btn btn-danger btn-sm" (click)="excluir()">
+              <i class="bi bi-trash me-1"></i>Excluir
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

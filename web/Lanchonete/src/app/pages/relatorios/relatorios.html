@@ -1,0 +1,129 @@
+<div class="p-4">
+  <div class="mb-4">
+    <h2 class="fw-bold">Relatórios</h2>
+    <p class="text-muted">Análise de vendas por período</p>
+  </div>
+
+  <!-- Filtro -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body d-flex flex-wrap gap-3 align-items-end">
+      <div>
+        <label class="form-label fw-semibold">Data Início</label>
+        <input type="date" class="form-control" [(ngModel)]="dataInicio" />
+      </div>
+      <div>
+        <label class="form-label fw-semibold">Data Fim</label>
+        <input type="date" class="form-control" [(ngModel)]="dataFim" />
+      </div>
+      <button class="btn btn-warning fw-semibold" (click)="buscar()" [disabled]="loading">
+        {{ loading ? 'Buscando...' : 'Gerar Relatório' }}
+      </button>
+    </div>
+  </div>
+
+  @if (relatorio) {
+    <!-- Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm text-center">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Total Faturado</p>
+            <h3 class="fw-bold text-success">{{ relatorio.totalFaturado | currency:'BRL' }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm text-center">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Total de Pedidos</p>
+            <h3 class="fw-bold">{{ relatorio.totalPedidos }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm text-center">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Ticket Médio</p>
+            <h3 class="fw-bold text-primary">{{ relatorio.ticketMedio | currency:'BRL' }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <!-- Faturamento por dia -->
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <h5 class="fw-semibold mb-3">Faturamento por Dia</h5>
+            <div class="table-responsive">
+              <table class="table table-sm">
+                <thead class="table-light">
+                  <tr><th>Data</th><th>Pedidos</th><th class="text-end">Valor</th></tr>
+                </thead>
+                <tbody>
+                  @for (d of relatorio.porDia; track d.data) {
+                    <tr>
+                      <td>{{ d.data }}</td>
+                      <td>{{ d.pedidos }}</td>
+                      <td class="text-end fw-semibold text-success">{{ d.valor | currency:'BRL' }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Produtos mais vendidos -->
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <h5 class="fw-semibold mb-3">Produtos Mais Vendidos</h5>
+            @for (p of relatorio.produtosMaisVendidos; track p.nome; let i = $index) {
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="badge rounded-circle" style="background-color: #e65100; min-width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;">{{ i + 1 }}</span>
+                <div class="flex-grow-1">
+                  <p class="mb-0 fw-semibold small">{{ p.nome }}</p>
+                  <small class="text-muted">{{ p.quantidade }} unidades</small>
+                </div>
+                <span class="text-success fw-semibold small">{{ p.receita | currency:'BRL' }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Pedidos por status -->
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <h5 class="fw-semibold mb-3">Pedidos por Status</h5>
+            @for (key of getKeys(relatorio.pedidosPorStatus); track key) {
+              <div class="d-flex justify-content-between mb-2">
+                <span>{{ key }}</span>
+                <span class="badge bg-secondary">{{ relatorio.pedidosPorStatus[key] }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Faturamento por categoria -->
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <h5 class="fw-semibold mb-3">Faturamento por Categoria</h5>
+            @for (key of getKeys(relatorio.faturamentoPorCategoria); track key) {
+              <div class="d-flex justify-content-between mb-2">
+                <span>{{ key }}</span>
+                <span class="fw-semibold text-success">{{ relatorio.faturamentoPorCategoria[key] | currency:'BRL' }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

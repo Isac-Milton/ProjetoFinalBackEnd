@@ -1,0 +1,146 @@
+<div class="p-4">
+  <div class="mb-4">
+    <h2 class="fw-bold">Novo Pedido</h2>
+    <p class="text-muted">Selecione os itens e preencha os dados</p>
+  </div>
+
+  <div class="row g-4">
+    <!-- Produtos -->
+    <div class="col-md-7">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="fw-semibold mb-3">Cardápio</h5>
+          <input class="form-control mb-3" [(ngModel)]="busca" placeholder="🔍 Buscar produto..." />
+          <div class="row g-2">
+            @for (p of produtosFiltrados; track p.id) {
+              <div class="col-md-6">
+                <div class="card border h-100" (click)="adicionarItem(p)" style="cursor: pointer;">
+                  <div class="card-body p-3">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <p class="fw-semibold mb-0 small">{{ p.nome }}</p>
+                        <small class="text-muted">{{ p.categoriaNome }}</small>
+                      </div>
+                      <span class="text-success fw-bold small">{{ p.preco | currency:'BRL' }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumo -->
+    <div class="col-md-5">
+      <div class="card border-0 shadow-sm mb-3">
+        <div class="card-body">
+          <h5 class="fw-semibold mb-3">Itens do Pedido</h5>
+          @if (itens.length === 0) {
+            <p class="text-muted text-center py-3">Nenhum item adicionado</p>
+          }
+          @for (item of itens; track item.produtoId; let i = $index) {
+            <div class="d-flex align-items-center gap-2 mb-2 p-2 bg-light rounded">
+              <div class="flex-grow-1">
+                <p class="mb-0 small fw-semibold">{{ item.produtoNome }}</p>
+                <small class="text-muted">{{ item.preco | currency:'BRL' }} cada</small>
+              </div>
+              <div class="d-flex align-items-center gap-1">
+                <button class="btn btn-sm btn-outline-secondary" (click)="diminuirItem(i)">-</button>
+                <span class="px-2">{{ item.quantidade }}</span>
+                <button class="btn btn-sm btn-outline-secondary" (click)="aumentarItem(i)">+</button>
+              </div>
+              <span class="fw-semibold text-success small">{{ item.preco * item.quantidade | currency:'BRL' }}</span>
+              <button class="btn btn-sm btn-outline-danger" (click)="removerItem(i)">
+                <i class="bi bi-x"></i>
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm mb-3">
+        <div class="card-body">
+          <h5 class="fw-semibold mb-3">Dados do Pedido</h5>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Tipo *</label>
+            <select class="form-select" [(ngModel)]="tipo">
+              <option value="Local">Local</option>
+              <option value="Delivery">Delivery</option>
+              <option value="Retirada">Retirada</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Pagamento *</label>
+            <select class="form-select" [(ngModel)]="formaPagamento">
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Cartao">Cartão</option>
+              <option value="Pix">Pix</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nome do Cliente</label>
+            <input class="form-control" [(ngModel)]="nomeCliente" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Telefone</label>
+            <input class="form-control" [(ngModel)]="telefoneCliente" />
+          </div>
+          @if (tipo === 'Delivery') {
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Endereço de Entrega</label>
+              <input class="form-control" [(ngModel)]="enderecoEntrega" />
+            </div>
+          }
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Observação</label>
+            <textarea class="form-control" [(ngModel)]="observacao" rows="2"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Cupom</label>
+            <div class="input-group">
+              <input class="form-control" [(ngModel)]="cupomCodigo" placeholder="CODIGO" />
+              <button class="btn btn-outline-warning" (click)="validarCupom()">Aplicar</button>
+            </div>
+            @if (cupomMensagem) {
+              <small [class]="cupomValido ? 'text-success' : 'text-danger'">{{ cupomMensagem }}</small>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted">Subtotal</span>
+            <span>{{ subtotal | currency:'BRL' }}</span>
+          </div>
+          @if (desconto > 0) {
+            <div class="d-flex justify-content-between mb-1 text-success">
+              <span>Desconto</span>
+              <span>-{{ desconto | currency:'BRL' }}</span>
+            </div>
+          }
+          @if (taxaEntrega > 0) {
+            <div class="d-flex justify-content-between mb-1">
+              <span class="text-muted">Taxa de Entrega</span>
+              <span>{{ taxaEntrega | currency:'BRL' }}</span>
+            </div>
+          }
+          <hr />
+          <div class="d-flex justify-content-between fw-bold fs-5">
+            <span>Total</span>
+            <span class="text-success">{{ total | currency:'BRL' }}</span>
+          </div>
+          @if (erro) {
+            <div class="alert alert-danger mt-3">{{ erro }}</div>
+          }
+          <button class="btn btn-warning w-100 fw-semibold mt-3 py-2" (click)="finalizar()" [disabled]="salvando">
+            {{ salvando ? 'Finalizando...' : 'Finalizar Pedido' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
