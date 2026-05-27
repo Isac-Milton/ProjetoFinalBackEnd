@@ -1,0 +1,15 @@
+# Visual Studio
+.vs/
+api/.vs/
+api/LanchoneteAPI/.vs/
+
+# C# build
+**/bin/
+**/obj/
+
+# Angular
+**/node_modules/
+**/.angular/
+
+# Angular git interno
+web/Lanchonete/.git/
