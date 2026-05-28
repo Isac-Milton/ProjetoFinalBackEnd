@@ -95,7 +95,7 @@ POST - /relatorios/vendas - Relatório por período (Admin)
 O backend segue arquitetura em camadas: Controllers (recebem as requisições) → Services (regras de negócio) → Repositories (acesso ao banco) → Models (entidades) → DTOs (objetos de entrada/saída).
 
 
-**7. Hospedagem em Produção**
+**6. Hospedagem em Produção**
 
 Frontend: Vercel — https://projeto-final-back-end-ruddy.vercel.app
 
